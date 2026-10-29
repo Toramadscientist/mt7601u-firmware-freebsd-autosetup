@@ -1,4 +1,4 @@
-# freebsd-mt6701u-wifi-fix
+# freebsd-mt7601u-wifi-fix
 > Automated script to get MediaTek MT6701U / MT7601U Wi-Fi adapters working seamlessly on FreeBSD
 
 ## Problem
