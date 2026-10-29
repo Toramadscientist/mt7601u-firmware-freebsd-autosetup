@@ -43,7 +43,7 @@ if confirm "1. Do you want to install packages/firmware from $FIRMWARE_DIR?"; th
         else
             echo "[!] No .pkg files found in $FIRMWARE_DIR."
             if confirm "    Install online 'pkg install wpa_supplicant'?"; then
-                pkg update && pkg install -y wpa_supplicant
+                pkg update && pkg install -y wpa_supplicant wifi-firmware-mt7601u-kmod
             fi
         fi
     else
