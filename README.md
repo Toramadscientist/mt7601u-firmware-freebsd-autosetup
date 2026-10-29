@@ -1,0 +1,1 @@
+# mt6701u-firmware-freebsd-autosetup
