@@ -89,6 +89,8 @@ if confirm "3. Do you want to add interface to /etc/rc.conf?"; then
     ifconfig wlan0 destroy 2>/dev/null; true
     ifconfig wlan0 create wlandev $DRIVER_IF 2>/dev/null && echo "[+] wlan0 created from $DRIVER_IF" || echo "[!] Failed create wlan0, cek dmesg"
 
+    sysrc -f /boot/loader.conf if_mt7601U_load="YES"
+    sysrc -f /boot/loader.conf mt7601Ufw_load="YES"
     sysrc wlans_${DRIVER_IF}="wlan0"
     sysrc ifconfig_wlan0="WPA DHCP"
     sysrc wpa_supplicant_enable="YES"
