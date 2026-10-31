@@ -28,9 +28,10 @@ echo "================================================="
 if confirm "1. Do you want to install packages/firmware from $FIRMWARE_DIR?"; then
     if [ -d "$FIRMWARE_DIR" ]; then
         echo "[i] Loading drivers..."
-        kldload if_run 2>/dev/null; kldload runfw 2>/dev/null
-        kldload if_mtw 2>/dev/null; kldload if_mt76 2>/dev/null
-        sysrc kld_list+=" if_run runfw if_mtw if_mt76" >/dev/null
+        # Koreksi: Load modul driver yang sesuai untuk MT7601U di FreeBSD (biasanya if_run / mt7601u)
+        kldload if_run 2>/dev/null
+        kldload mt7601ufw 2>/dev/null
+        sysrc kld_list+=" if_run mt7601ufw" >/dev/null
 
         LOCAL_PKG=$(ls "$FIRMWARE_DIR"/*.pkg 2>/dev/null)
         if [ -n "$LOCAL_PKG" ]; then
@@ -42,7 +43,7 @@ if confirm "1. Do you want to install packages/firmware from $FIRMWARE_DIR?"; th
             fi
         else
             echo "[!] No .pkg files found in $FIRMWARE_DIR."
-            if confirm "    Install online 'pkg install wpa_supplicant'?"; then
+            if confirm "    Install online 'pkg install wpa_supplicant' & firmware?"; then
                 pkg update && pkg install -y wpa_supplicant wifi-firmware-mt7601u-kmod
             fi
         fi
@@ -79,17 +80,17 @@ fi
 echo ""
 
 if confirm "3. Do you want to add interface to /etc/rc.conf?"; then
-    DETECTED_IF=$(dmesg | grep -E "run0|mtw0|mt76" | tail -1 | grep -oE "run[0-9]|mtw[0-9]|mt76[0-9]" | head -1)
-    [ -z "$DETECTED_IF" ] && DETECTED_IF="mtw0"
+    DETECTED_IF=$(dmesg | grep -E "run[0-9]|mtw[0-9]" | tail -1 | grep -oE "(run|mtw)[0-9]" | head -1)
+    [ -z "$DETECTED_IF" ] && DETECTED_IF="run0"
     
     printf "Enter driver interface name (detected: %s): " "$DETECTED_IF"
     read -r INPUT_IF
     DRIVER_IF=${INPUT_IF:-$DETECTED_IF}
     
-    ifconfig wlan0 destroy 2>/dev/null; true
-    ifconfig wlan0 create wlandev $DRIVER_IF 2>/dev/null && echo "[+] wlan0 created from $DRIVER_IF" || echo "[!] Failed create wlan0, cek dmesg"
+    ifconfig wlan0 destroy 2>/dev/null
+    ifconfig wlan0 create wlandev "$DRIVER_IF" 2>/dev/null && echo "[+] wlan0 created from $DRIVER_IF" || echo "[!] Failed create wlan0, cek dmesg"
 
-    sysrc -f /boot/loader.conf if_mt7601u_load="YES"
+    sysrc -f /boot/loader.conf if_run_load="YES"
     sysrc -f /boot/loader.conf mt7601ufw_load="YES"
     sysrc wlans_${DRIVER_IF}="wlan0"
     sysrc ifconfig_wlan0="WPA DHCP"
@@ -104,7 +105,7 @@ if confirm "4. Restart network and connect now?"; then
     service routing restart
     sleep 2
     ifconfig wlan0
-    echo "[+] Done! ping 8.8.8.8"
+    echo "[+] Done! Cek koneksi dengan ping 8.8.8.8"
 else
     echo "[->] Skipping. Reboot needed."
 fi
