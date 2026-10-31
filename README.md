@@ -2,7 +2,7 @@
 > Automated script to get MediaTek MT7601U Wi-Fi adapters working seamlessly on FreeBSD
 
 ## Problem
-I needed to set up a wireless network connection on a FreeBSD box using an affordable USB Wi-Fi dongle powered by the MediaTek MT6701U (MT7601U) chipset. While FreeBSD actually supports this hardware out of the box through the `rtwn_usb` driver, getting it to work properly is far from straightforward for most users.
+I needed to set up a wireless network connection on a FreeBSD box using an affordable USB Wi-Fi dongle powered by the MediaTek MT7601U chipset. While FreeBSD actually supports this hardware out of the box through the `rtwn_usb` driver, getting it to work properly is far from straightforward for most users.
 
 The main issues preventing a plug-and-play experience on FreeBSD are:
 
@@ -24,7 +24,7 @@ Here is a breakdown of what the fix does:
 ## Installation
 **WARNING** - *This script modifies core system configuration files (`loader.conf`, `rc.conf`, `wpa_supplicant.conf`). Make sure your Wi-Fi dongle is plugged in before proceeding, and ensure you have root access.*
 
-These instructions were tested on FreeBSD 13.x and 14.x.
+These instructions were tested on FreeBSD 15.x.
 
 1. Install `git` if you haven't already (or use `fetch` to download the raw script):
 
@@ -39,7 +39,7 @@ These instructions were tested on FreeBSD 13.x and 14.x.
 3. Change to the repository directory:
 
    ```
-   cd freebsd-mt6701u-wifi-fix
+   cd freebsd-mt7601u-wifi-fix
    ```
 4. Make the script executable:
 
@@ -57,5 +57,5 @@ These instructions were tested on FreeBSD 13.x and 14.x.
 
    ```
    ifconfig wlan0
-   ping -c 4 1.1.1.1
+   ping -c 10 1.1.1.1
    ```
