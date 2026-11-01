@@ -88,10 +88,10 @@ if confirm "3. Do you want to add interface to /etc/rc.conf?"; then
     DRIVER_IF=${INPUT_IF:-$DETECTED_IF}
     
     ifconfig wlan0 destroy 2>/dev/null
-    ifconfig wlan0 create wlandev "$DRIVER_IF" 2>/dev/null && echo "[+] wlan0 created from $DRIVER_IF" || echo "[!] Failed create wlan0, cek dmesg"
+    ifconfig wlan0 create wlandev "$DRIVER_IF" 2>/dev/null && echo "[+] wlan0 created from $DRIVER_IF" || echo "[!] Failed create wlan0, try replugging ur usb wifi or check dmesg"
 
-    sysrc -f /boot/loader.conf if_run_load="YES"
-    sysrc -f /boot/loader.conf mt7601ufw_load="YES"
+    sysrc -f /boot/loader.conf if_mtw_load="YES"
+    echo "[+] /boot/loader.conf updated."
     sysrc wlans_${DRIVER_IF}="wlan0"
     sysrc ifconfig_wlan0="WPA DHCP"
     sysrc wpa_supplicant_enable="YES"
