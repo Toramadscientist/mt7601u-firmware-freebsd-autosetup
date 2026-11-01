@@ -59,3 +59,4 @@ These instructions were tested on FreeBSD 15.x.
    ifconfig wlan0
    ping -c 10 1.1.1.1
    ```
+8. If After rebooting your wlan0 gone try replugging the USB wifi
